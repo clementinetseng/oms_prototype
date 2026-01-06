@@ -12,6 +12,7 @@ import os
 
 models.Base.metadata.create_all(bind=engine)
 
+# Trigger redeploy for Render
 app = FastAPI(title="OMS Prototype")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
