@@ -23,7 +23,7 @@ templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 @app.post("/token", response_model=schemas.Token)
 async def login_for_access_token(request: Request, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     # 1. IP Check
-    await auth.check_ip_whitelist(request, db)
+    # await auth.check_ip_whitelist(request, db)  # Disabled for public prototype demo
 
     # 2. Auth
     user = db.query(models.User).options(auth.joinedload(models.User.role)).filter(models.User.username == form_data.username).first()
