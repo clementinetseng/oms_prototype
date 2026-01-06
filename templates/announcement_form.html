@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}New Announcement - OMS{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto flex flex-col gap-6">
+    <div class="flex items-center gap-2 text-sm mb-2">
+        <a class="text-text-secondary hover:text-primary transition-colors flex items-center gap-1" href="/dashboard">
+            <span class="material-symbols-outlined text-[18px]">home</span>
+            System
+        </a>
+        <span class="text-gray-300">/</span>
+        <a class="text-text-secondary hover:text-primary transition-colors" href="/announcements">Announcements</a>
+        <span class="text-gray-300">/</span>
+        <span class="text-text-main dark:text-white font-medium">New Announcement</span>
+    </div>
+
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-text-main dark:text-white text-3xl font-black tracking-tight leading-tight">Create New Announcement</h1>
+            <p class="text-text-secondary mt-1 text-base">Compose and schedule system-wide notifications for all users.</p>
+        </div>
+        <div class="flex gap-3">
+            <a href="/announcements" class="px-4 py-2 bg-white dark:bg-surface-dark border border-border-light dark:border-border-dark text-text-main dark:text-white rounded-lg font-medium text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">close</span>
+                Cancel
+            </a>
+            <button class="px-4 py-2 bg-primary text-white rounded-lg font-medium text-sm shadow-sm hover:bg-blue-600 transition-colors flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">save</span>
+                Save &amp; Publish
+            </button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 flex flex-col gap-6">
+            <div class="bg-white dark:bg-surface-dark rounded-xl p-6 shadow-sm border border-border-light dark:border-border-dark">
+                <label class="block mb-2 text-sm font-semibold text-text-main dark:text-white">Announcement Title <span class="text-red-500">*</span></label>
+                <div class="relative">
+                    <input class="w-full bg-background-light dark:bg-gray-800 border border-border-light dark:border-border-dark text-text-main dark:text-white text-base rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary block p-3.5 placeholder-gray-400" placeholder="e.g., Scheduled Maintenance for October 25th" type="text"/>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <span class="text-xs text-gray-400 font-medium">0/100</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden flex flex-col flex-1 min-h-[500px]">
+                <div class="bg-background-light dark:bg-gray-800 border-b border-border-light dark:border-border-dark p-2 flex flex-wrap gap-1 items-center">
+                    <div class="flex items-center gap-0.5 border-r border-border-light dark:border-gray-600 pr-2 mr-2">
+                        <select class="bg-transparent border-none text-sm font-medium text-text-main dark:text-white focus:ring-0 cursor-pointer h-8 py-0">
+                            <option>Normal Text</option>
+                            <option>Heading 1</option>
+                            <option>Heading 2</option>
+                            <option>Heading 3</option>
+                        </select>
+                    </div>
+                    <button class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-text-secondary dark:text-gray-400" title="Bold">
+                        <span class="material-symbols-outlined text-[20px]">format_bold</span>
+                    </button>
+                    <button class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-text-secondary dark:text-gray-400" title="Italic">
+                        <span class="material-symbols-outlined text-[20px]">format_italic</span>
+                    </button>
+                    <button class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-text-secondary dark:text-gray-400" title="Underline">
+                        <span class="material-symbols-outlined text-[20px]">format_underlined</span>
+                    </button>
+                    <div class="w-px h-5 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+                    <button class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-text-secondary dark:text-gray-400" title="Bullet List">
+                        <span class="material-symbols-outlined text-[20px]">format_list_bulleted</span>
+                    </button>
+                    <button class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-text-secondary dark:text-gray-400" title="Numbered List">
+                        <span class="material-symbols-outlined text-[20px]">format_list_numbered</span>
+                    </button>
+                    <div class="w-px h-5 bg-gray-300 dark:bg-gray-600 mx-1"></div>
+                    <button class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-text-secondary dark:text-gray-400" title="Insert Link">
+                        <span class="material-symbols-outlined text-[20px]">link</span>
+                    </button>
+                    <button class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-text-secondary dark:text-gray-400" title="Insert Image">
+                        <span class="material-symbols-outlined text-[20px]">image</span>
+                    </button>
+                    <button class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-text-secondary dark:text-gray-400 ml-auto" title="Fullscreen">
+                        <span class="material-symbols-outlined text-[20px]">fullscreen</span>
+                    </button>
+                </div>
+                <textarea class="w-full flex-1 p-6 resize-none outline-none border-none focus:ring-0 bg-white dark:bg-surface-dark text-text-main dark:text-white placeholder-gray-400 leading-relaxed" placeholder="Type your announcement content here..."></textarea>
+                <div class="px-4 py-2 bg-white dark:bg-surface-dark border-t border-border-light dark:border-border-dark flex justify-between items-center">
+                    <span class="text-xs text-gray-400">Markdown shortcuts supported</span>
+                    <span class="text-xs text-gray-400">Last saved: Just now</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-1 flex flex-col gap-6">
+            <div class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden">
+                <div class="p-5 border-b border-border-light dark:border-border-dark flex items-center justify-between">
+                    <div>
+                        <h3 class="text-base font-bold text-text-main dark:text-white">Publish Status</h3>
+                        <p class="text-xs text-text-secondary mt-1">Make visible to all users</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input checked="" class="sr-only peer" type="checkbox" value=""/>
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/50 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    </label>
+                </div>
+                <div class="p-5">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-text-secondary">calendar_month</span>
+                        <h3 class="text-sm font-bold text-text-main dark:text-white uppercase tracking-wider">Schedule</h3>
+                    </div>
+                    <div class="flex flex-col gap-5">
+                        <div>
+                            <label class="block text-xs font-semibold text-text-secondary mb-1.5">Start Display</label>
+                            <div class="flex gap-2">
+                                <div class="relative flex-1">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-text-secondary">
+                                        <span class="material-symbols-outlined text-[18px]">event</span>
+                                    </div>
+                                    <input class="w-full pl-9 pr-2 py-2 text-sm bg-background-light dark:bg-gray-800 border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary" type="text" value="Oct 24, 2023"/>
+                                </div>
+                                <div class="relative w-24">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none text-text-secondary">
+                                        <span class="material-symbols-outlined text-[18px]">schedule</span>
+                                    </div>
+                                    <input class="w-full pl-7 pr-1 py-2 text-sm bg-background-light dark:bg-gray-800 border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary" type="text" value="09:00"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label class="block text-xs font-semibold text-text-secondary">End Display</label>
+                                <label class="flex items-center gap-1.5 cursor-pointer group">
+                                    <input class="w-3.5 h-3.5 text-primary border-border-light dark:border-border-dark rounded focus:ring-primary/50 cursor-pointer" type="checkbox"/>
+                                    <span class="text-xs text-text-secondary group-hover:text-primary transition-colors">Indefinite</span>
+                                </label>
+                            </div>
+                            <div class="flex gap-2">
+                                <div class="relative flex-1">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-text-secondary">
+                                        <span class="material-symbols-outlined text-[18px]">event</span>
+                                    </div>
+                                    <input class="w-full pl-9 pr-2 py-2 text-sm bg-background-light dark:bg-gray-800 border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder-gray-400" placeholder="Select date" type="text"/>
+                                </div>
+                                <div class="relative w-24">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none text-text-secondary">
+                                        <span class="material-symbols-outlined text-[18px]">schedule</span>
+                                    </div>
+                                    <input class="w-full pl-7 pr-1 py-2 text-sm bg-background-light dark:bg-gray-800 border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder-gray-400" placeholder="--:--" type="text"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

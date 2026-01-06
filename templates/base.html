@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>{% block title %}OMS Admin{% endblock %}</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Noto+Sans+TC:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "primary-hover": "#0f6ac6",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2632",
+                        "border-light": "#e5e7eb",
+                        "border-dark": "#2d3748",
+                        "text-main": "#111418",
+                        "text-secondary": "#617589",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans TC", "sans-serif"],
+                        "body": ["Inter", "Noto Sans TC", "sans-serif"],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-white h-screen flex overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-surface-light dark:bg-surface-dark border-r border-border-light dark:border-border-dark flex-shrink-0 hidden md:flex flex-col z-20">
+        <div class="h-16 flex items-center px-6 border-b border-border-light dark:border-border-dark">
+            <div class="flex flex-col">
+                <h1 class="text-primary text-xl font-bold leading-none tracking-tight">OMS</h1>
+                <span class="text-text-secondary text-xs font-normal mt-1">Admin Console</span>
+            </div>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-6 px-3 gap-2 flex flex-col">
+            <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:bg-background-light dark:hover:bg-gray-800 transition-colors group" href="/dashboard">
+                <span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">dashboard</span>
+                <span class="text-sm font-medium">Dashboard</span>
+            </a>
+            
+            <div class="flex flex-col gap-1 mt-2">
+                <p class="px-3 text-xs font-semibold text-text-secondary uppercase tracking-wider mb-1">Organization</p>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:bg-background-light dark:hover:bg-gray-800 transition-colors group" href="/org/operators">
+                    <span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">domain</span>
+                    <span class="text-sm font-medium">Operators</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:bg-background-light dark:hover:bg-gray-800 transition-colors group" href="/org/outlets">
+                    <span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">storefront</span>
+                    <span class="text-sm font-medium">Outlets</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:bg-background-light dark:hover:bg-gray-800 transition-colors group" href="/org/staff">
+                    <span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">group</span>
+                    <span class="text-sm font-medium">Staff</span>
+                </a>
+            </div>
+
+            <div class="flex flex-col gap-1 mt-4">
+                <p class="px-3 text-xs font-semibold text-text-secondary uppercase tracking-wider mb-1">System</p>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:bg-background-light dark:hover:bg-gray-800 transition-colors group" href="/pos">
+                    <span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">point_of_sale</span>
+                    <span class="text-sm font-medium">POS Management</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:bg-background-light dark:hover:bg-gray-800 transition-colors group" href="/machines">
+                    <span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">monitor</span>
+                    <span class="text-sm font-medium">Machine Mgmt</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:bg-background-light dark:hover:bg-gray-800 transition-colors group" href="/announcements">
+                    <span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">campaign</span>
+                    <span class="text-sm font-medium">Announcements</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-secondary hover:bg-background-light dark:hover:bg-gray-800 transition-colors group" href="/settings">
+                    <span class="material-symbols-outlined text-[20px] group-hover:text-primary transition-colors">settings</span>
+                    <span class="text-sm font-medium">Settings</span>
+                </a>
+            </div>
+        </nav>
+        <div class="p-4 border-t border-border-light dark:border-border-dark">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="logout()">
+                <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+                    <span class="material-symbols-outlined text-sm">logout</span>
+                </div>
+                <div class="flex flex-col overflow-hidden">
+                    <p class="text-sm font-medium text-text-main dark:text-white truncate">Logout</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        <!-- Mobile Header -->
+        <header class="h-16 bg-surface-light dark:bg-surface-dark border-b border-border-light dark:border-border-dark flex items-center justify-between px-6 md:px-8 z-10 md:hidden">
+            <div class="flex items-center gap-4">
+                <button class="p-1 text-text-secondary hover:text-primary">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <span class="font-bold text-lg">OMS</span>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark p-6 md:p-10">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <script>
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+        
+        // Highlight active menu item
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            const links = document.querySelectorAll('nav a');
+            links.forEach(link => {
+                if (link.getAttribute('href') === path || (path.startsWith(link.getAttribute('href')) && link.getAttribute('href') !== '/dashboard')) {
+                    link.classList.remove('text-text-secondary', 'hover:bg-background-light');
+                    link.classList.add('bg-primary/10', 'text-primary');
+                    const icon = link.querySelector('.material-symbols-outlined');
+                    if(icon) icon.classList.add('fill-current');
+                }
+            });
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

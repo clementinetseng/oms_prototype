@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Add Staff - OMS{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto flex flex-col gap-6">
+    <nav class="flex flex-wrap gap-2 text-sm">
+        <a class="text-text-secondary hover:text-primary transition-colors font-medium" href="/dashboard">Home</a>
+        <span class="text-text-secondary font-medium">/</span>
+        <a class="text-text-secondary hover:text-primary transition-colors font-medium" href="/org/staff">Staff Management</a>
+        <span class="text-text-secondary font-medium">/</span>
+        <span class="text-text-main dark:text-white font-medium">Add Staff</span>
+    </nav>
+
+    <div class="flex flex-col gap-2">
+        <h1 class="text-text-main dark:text-white tracking-tight text-3xl font-bold leading-tight">新增/編輯店員帳號</h1>
+        <p class="text-text-secondary text-base font-normal">管理店員的基本資料、安全設定與系統權限分配</p>
+    </div>
+
+    <form id="addStaffForm" onsubmit="event.preventDefault(); createStaff();">
+        <div class="bg-white dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm overflow-hidden">
+            <div class="p-6 md:p-8 border-b border-border-light dark:border-border-dark">
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="material-symbols-outlined text-primary">manage_accounts</span>
+                    <h3 class="text-lg font-bold text-text-main dark:text-white">帳號設定 (Account Settings)</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <label class="flex flex-col gap-2">
+                        <span class="text-text-main dark:text-gray-200 text-sm font-medium">員工姓名 (Name) <span class="text-red-500">*</span></span>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="material-symbols-outlined text-text-secondary text-lg">person</span>
+                            </div>
+                            <input class="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-800 border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-white placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="Enter full name" type="text" name="username" required/>
+                        </div>
+                    </label>
+                    <label class="flex flex-col gap-2">
+                        <span class="text-text-main dark:text-gray-200 text-sm font-medium">員工電話 (Phone) <span class="text-red-500">*</span></span>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="material-symbols-outlined text-text-secondary text-lg">call</span>
+                            </div>
+                            <input class="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-800 border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-white placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="Enter phone number" type="tel"/>
+                        </div>
+                    </label>
+                    <label class="flex flex-col gap-2">
+                        <span class="text-text-main dark:text-gray-200 text-sm font-medium">員工帳號/ID (Account ID) <span class="text-red-500">*</span></span>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="material-symbols-outlined text-text-secondary text-lg">fingerprint</span>
+                            </div>
+                            <input class="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-800 border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-white placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="Enter unique ID (e.g. STF-001)" type="text"/>
+                        </div>
+                    </label>
+                    <label class="flex flex-col gap-2">
+                        <span class="text-text-main dark:text-gray-200 text-sm font-medium">登入密碼 (Password)</span>
+                        <div class="relative">
+                            <input class="w-full pl-4 pr-10 py-3 bg-white dark:bg-gray-800 border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-white placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="••••••••" type="password" name="password" required/>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="p-6 md:p-8">
+                <div class="flex items-center gap-2 mb-6">
+                    <span class="material-symbols-outlined text-primary">admin_panel_settings</span>
+                    <h3 class="text-lg font-bold text-text-main dark:text-white">權限與狀態 (Permissions & Status)</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <label class="flex flex-col gap-2">
+                        <span class="text-text-main dark:text-gray-200 text-sm font-medium">帳號歸屬 (Outlet Scope) <span class="text-red-500">*</span></span>
+                        <div class="relative w-full border border-border-light dark:border-border-dark rounded-lg bg-white dark:bg-gray-800 flex items-center min-h-[50px] focus-within:ring-2 focus-within:ring-primary/50 focus-within:border-primary transition-all cursor-text ring-1 ring-transparent">
+                            <select class="w-full bg-transparent border-none focus:ring-0 p-2 text-sm text-text-main dark:text-white" name="outlet_id" id="outletSelect">
+                                <option value="">Select Outlet...</option>
+                            </select>
+                        </div>
+                    </label>
+                    <label class="flex flex-col gap-2">
+                        <span class="text-text-main dark:text-gray-200 text-sm font-medium">功能角色 (Role) <span class="text-red-500">*</span></span>
+                        <div class="relative">
+                            <select class="w-full pl-4 pr-10 py-3 appearance-none bg-white dark:bg-gray-800 border border-border-light dark:border-border-dark rounded-lg text-text-main dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" name="role_id" id="roleSelect" required>
+                                <option disabled="" selected="" value="">Select a role...</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-text-secondary">
+                                <span class="material-symbols-outlined">expand_more</span>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="px-6 md:px-8 py-5 bg-gray-50 dark:bg-gray-900/50 border-t border-border-light dark:border-border-dark flex items-center justify-end gap-4">
+                <a href="/org/staff" class="px-6 py-2.5 rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-gray-800 text-text-main dark:text-white text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" type="button">
+                    Cancel
+                </a>
+                <button class="px-6 py-2.5 rounded-lg bg-primary text-white text-sm font-bold shadow-sm hover:bg-primary/90 focus:ring-4 focus:ring-primary/30 transition-all flex items-center gap-2" type="submit">
+                    <span class="material-symbols-outlined text-[18px]">save</span>
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/';
+
+    async function loadOptions() {
+        // Load Roles
+        const rolesResp = await fetch('/api/roles', { headers: { 'Authorization': `Bearer ${token}` } });
+        if (rolesResp.ok) {
+            const roles = await rolesResp.json();
+            const select = document.getElementById('roleSelect');
+            select.innerHTML = '<option disabled selected value="">Select a role...</option>' + 
+                roles.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+        }
+
+        // Load Outlets
+        const outletsResp = await fetch('/api/outlets', { headers: { 'Authorization': `Bearer ${token}` } });
+        if (outletsResp.ok) {
+            const outlets = await outletsResp.json();
+            const select = document.getElementById('outletSelect');
+            select.innerHTML = '<option value="">Select Outlet...</option>' + 
+                outlets.map(o => `<option value="${o.id}">${o.name}</option>`).join('');
+        }
+    }
+
+    async function createStaff() {
+        const form = document.getElementById('addStaffForm');
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Clean up empty values
+        if (!data.outlet_id) delete data.outlet_id;
+
+        try {
+            const response = await fetch('/api/users', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert('Staff created successfully!');
+                window.location.href = '/org/staff';
+            } else {
+                const err = await response.json();
+                alert('Error: ' + err.detail);
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Failed to create staff');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadOptions);
+</script>
+{% endblock %}

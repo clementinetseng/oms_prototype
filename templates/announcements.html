@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}System Announcements - OMS{% endblock %}
+
+{% block content %}
+<div class="max-w-[1200px] mx-auto flex flex-col gap-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h2 class="text-3xl font-bold text-text-main dark:text-white tracking-tight">System Announcements</h2>
+            <p class="text-text-secondary mt-1">Manage and publish system-wide notifications.</p>
+        </div>
+        <a href="/announcements/new" class="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-lg font-medium shadow-sm transition-all active:scale-95">
+            <span class="material-symbols-outlined text-[20px]">add</span>
+            <span>New Announcement</span>
+        </a>
+    </div>
+
+    <div class="bg-white dark:bg-surface-dark p-4 rounded-xl shadow-card border border-border-light dark:border-border-dark flex flex-col md:flex-row gap-4 items-center">
+        <div class="relative flex-1 w-full">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary">
+                <span class="material-symbols-outlined">search</span>
+            </span>
+            <input class="w-full pl-10 pr-4 py-2.5 bg-background-light dark:bg-gray-800 border border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-primary focus:ring-4 focus:ring-primary/10 rounded-lg text-sm text-text-main dark:text-white placeholder:text-gray-400 transition-all outline-none" placeholder="Search title/content" type="text"/>
+        </div>
+        <div class="relative w-full md:w-64 cursor-pointer group">
+            <div class="flex items-center justify-between w-full pl-4 pr-3 py-2.5 bg-background-light dark:bg-gray-800 border border-transparent group-hover:bg-white dark:group-hover:bg-gray-700 group-hover:border-gray-200 dark:group-hover:border-gray-600 rounded-lg text-sm text-text-secondary transition-all">
+                <span>Select Date Range</span>
+                <span class="material-symbols-outlined text-gray-400">calendar_today</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white dark:bg-surface-dark rounded-xl shadow-card border border-border-light dark:border-border-dark overflow-hidden flex flex-col">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-background-light/50 dark:bg-gray-800/50 border-b border-border-light dark:border-border-dark">
+                        <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary w-12">
+                            <input class="rounded border-gray-300 text-primary focus:ring-primary/50 cursor-pointer" type="checkbox"/>
+                        </th>
+                        <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary">Title</th>
+                        <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary">Publisher</th>
+                        <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary">Display Period</th>
+                        <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary text-center">Status</th>
+                        <th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-border-light dark:divide-border-dark">
+                    <!-- Example Row 1 -->
+                    <tr class="hover:bg-background-light/40 dark:hover:bg-gray-800/40 transition-colors group">
+                        <td class="py-4 px-6">
+                            <input class="rounded border-gray-300 text-primary focus:ring-primary/50 cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity" type="checkbox"/>
+                        </td>
+                        <td class="py-4 px-6">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-semibold text-text-main dark:text-white line-clamp-1">System Maintenance: Server Upgrade</span>
+                                <span class="text-xs text-text-secondary mt-0.5">Scheduled for 2023/11/15 early morning...</span>
+                            </div>
+                        </td>
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600">AD</div>
+                                <span class="text-sm text-text-main dark:text-white">Admin</span>
+                            </div>
+                        </td>
+                        <td class="py-4 px-6">
+                            <div class="flex flex-col text-sm text-text-secondary">
+                                <span>2023/11/01 09:00</span>
+                                <span class="text-xs text-gray-400">to 2023/11/05 18:00</span>
+                            </div>
+                        </td>
+                        <td class="py-4 px-6 text-center">
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input checked="" class="sr-only peer" type="checkbox" value=""/>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </td>
+                        <td class="py-4 px-6 text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                <button class="p-1.5 text-text-secondary hover:text-primary hover:bg-primary-light rounded-md transition-colors" title="Edit">
+                                    <span class="material-symbols-outlined text-[20px]">edit</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

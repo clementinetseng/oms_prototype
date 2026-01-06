@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+
+{% block title %}POS - Machine List | OMS{% endblock %}
+
+{% block content %}
+<div class="max-w-[1600px] mx-auto flex flex-col gap-6">
+    <!-- Page Heading & Stats -->
+    <div class="flex flex-col lg:flex-row gap-6 justify-between items-start lg:items-center">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-text-main dark:text-white">Machine Overview</h1>
+            <p class="text-text-secondary dark:text-slate-400 text-sm mt-1">Real-time status of all gaming terminals</p>
+        </div>
+        <!-- Quick Stats Cards -->
+        <div class="flex gap-3 flex-wrap">
+            <div class="flex items-center gap-3 px-4 py-2 bg-white dark:bg-surface-dark rounded-lg border border-border-light dark:border-border-dark shadow-sm">
+                <div class="size-8 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined text-[18px]">dns</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xs text-text-secondary dark:text-slate-400 font-medium">Total</span>
+                    <span class="text-lg font-bold leading-none text-text-main dark:text-white" id="stat-total">--</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 px-4 py-2 bg-white dark:bg-surface-dark rounded-lg border border-border-light dark:border-border-dark shadow-sm">
+                <div class="size-8 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined text-[18px] fill-1">videogame_asset</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xs text-text-secondary dark:text-slate-400 font-medium">In Use</span>
+                    <span class="text-lg font-bold leading-none text-text-main dark:text-white" id="stat-in-use">--</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 px-4 py-2 bg-white dark:bg-surface-dark rounded-lg border border-border-light dark:border-border-dark shadow-sm">
+                <div class="size-8 rounded-full bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-emerald-600">
+                    <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xs text-text-secondary dark:text-slate-400 font-medium">Idle</span>
+                    <span class="text-lg font-bold leading-none text-text-main dark:text-white" id="stat-idle">--</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 px-4 py-2 bg-white dark:bg-surface-dark rounded-lg border border-border-light dark:border-border-dark shadow-sm">
+                <div class="size-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-500">
+                    <span class="material-symbols-outlined text-[18px]">power_off</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-xs text-text-secondary dark:text-slate-400 font-medium">Offline</span>
+                    <span class="text-lg font-bold leading-none text-text-main dark:text-white" id="stat-offline">--</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terminal Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="terminal-grid">
+        <!-- Loading Skeletons -->
+        <div class="animate-pulse bg-white dark:bg-surface-dark h-48 rounded-xl border border-border-light dark:border-border-dark"></div>
+        <div class="animate-pulse bg-white dark:bg-surface-dark h-48 rounded-xl border border-border-light dark:border-border-dark"></div>
+        <div class="animate-pulse bg-white dark:bg-surface-dark h-48 rounded-xl border border-border-light dark:border-border-dark"></div>
+        <div class="animate-pulse bg-white dark:bg-surface-dark h-48 rounded-xl border border-border-light dark:border-border-dark"></div>
+    </div>
+</div>
+
+<!-- Bind Modal -->
+<div id="bindModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity backdrop-blur-sm"></div>
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-surface-dark text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-border-light dark:border-border-dark">
+                <div class="bg-white dark:bg-surface-dark px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <span class="material-symbols-outlined text-blue-600">link</span>
+                        </div>
+                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                            <h3 class="text-base font-semibold leading-6 text-text-main dark:text-white" id="modal-title">Bind Terminal</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-text-secondary">Enter player phone number to activate this terminal.</p>
+                                <input type="hidden" id="bind-tid">
+                                <div class="mt-4">
+                                    <label class="block text-sm font-medium leading-6 text-text-main dark:text-gray-200 mb-2">Player Phone</label>
+                                    <input type="text" id="bind-phone" class="block w-full rounded-lg border-0 py-2.5 px-4 text-text-main dark:text-white bg-background-light dark:bg-gray-800 shadow-sm ring-1 ring-inset ring-border-light dark:ring-gray-600 placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6" placeholder="e.g. 0912345678">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-800/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <button type="button" onclick="submitBind()" class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 sm:ml-3 sm:w-auto">Activate</button>
+                    <button type="button" onclick="closeModal('bindModal')" class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-text-main dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 sm:mt-0 sm:w-auto">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Deposit Modal -->
+<div id="depositModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity backdrop-blur-sm"></div>
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-surface-dark text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-border-light dark:border-border-dark">
+                <div class="bg-white dark:bg-surface-dark px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <span class="material-symbols-outlined text-green-600">payments</span>
+                        </div>
+                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                            <h3 class="text-base font-semibold leading-6 text-text-main dark:text-white">Deposit Credits</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-text-secondary">Add credits to the terminal.</p>
+                                <input type="hidden" id="deposit-tid">
+                                <div class="mt-4">
+                                    <label class="block text-sm font-medium leading-6 text-text-main dark:text-gray-200 mb-2">Amount</label>
+                                    <input type="number" id="deposit-amount" class="block w-full rounded-lg border-0 py-2.5 px-4 text-text-main dark:text-white bg-background-light dark:bg-gray-800 shadow-sm ring-1 ring-inset ring-border-light dark:ring-gray-600 placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6" placeholder="e.g. 1000">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-800/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <button type="button" onclick="submitDeposit()" class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto">Deposit</button>
+                    <button type="button" onclick="closeModal('depositModal')" class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-text-main dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 sm:mt-0 sm:w-auto">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Settle Modal -->
+<div id="settleModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity backdrop-blur-sm"></div>
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-surface-dark text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-border-light dark:border-border-dark">
+                <div class="bg-white dark:bg-surface-dark px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <span class="material-symbols-outlined text-red-600">logout</span>
+                        </div>
+                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                            <h3 class="text-base font-semibold leading-6 text-text-main dark:text-white">Settle & Unbind</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-text-secondary">Are you sure you want to settle credits and unbind this terminal?</p>
+                                <input type="hidden" id="settle-tid">
+                                <div class="mt-4 p-4 bg-background-light dark:bg-gray-800 rounded-lg">
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-sm text-text-secondary">Current Credits:</span>
+                                        <span class="text-sm font-bold text-text-main dark:text-white" id="settle-credits">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-800/50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <button type="button" onclick="submitSettle()" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Settle & Unbind</button>
+                    <button type="button" onclick="closeModal('settleModal')" class="mt-3 inline-flex w-full justify-center rounded-md bg-white dark:bg-gray-700 px-3 py-2 text-sm font-semibold text-text-main dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 sm:mt-0 sm:w-auto">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    async function loadTerminals() {
+        const token = localStorage.getItem('token');
+        if (!token) window.location.href = '/';
+
+        try {
+            const response = await fetch('/api/terminals', {
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+            
+            if (response.ok) {
+                const terminals = await response.json();
+                const grid = document.getElementById('terminal-grid');
+                grid.innerHTML = '';
+
+                // Update Stats
+                let total = terminals.length;
+                let inUse = terminals.filter(t => t.status === 'active').length;
+                let idle = terminals.filter(t => t.status === 'idle').length;
+                let offline = 0; // Assuming API doesn't return offline status yet, or we calculate it
+
+                document.getElementById('stat-total').textContent = total;
+                document.getElementById('stat-in-use').textContent = inUse;
+                document.getElementById('stat-idle').textContent = idle;
+                document.getElementById('stat-offline').textContent = offline;
+
+                terminals.forEach(t => {
+                    const isIdle = t.status === 'idle';
+                    const statusColor = isIdle ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
+                    const statusText = isIdle ? 'Idle' : 'In Use';
+                    
+                    const card = document.createElement('div');
+                    card.className = 'bg-white dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col';
+                    
+                    card.innerHTML = `
+                        <div class="p-5 flex-1">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-gray-600 dark:text-gray-400">desktop_windows</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-text-main dark:text-white">${t.name}</h3>
+                                        <p class="text-xs text-text-secondary">ID: ${t.id}</p>
+                                    </div>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full text-xs font-medium ${statusColor}">
+                                    ${statusText}
+                                </span>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-secondary">Current Player</span>
+                                    <span class="font-medium text-text-main dark:text-white">${t.current_player_id || '-'}</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-text-secondary">Credits</span>
+                                    <span class="font-bold text-text-main dark:text-white">${t.credits || 0}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 dark:bg-gray-800/50 px-5 py-3 border-t border-border-light dark:border-border-dark flex gap-2">
+                            ${isIdle ? 
+                                `<button onclick="openBindModal('${t.id}')" class="flex-1 bg-primary hover:bg-blue-600 text-white text-sm font-medium py-2 rounded-lg transition-colors">Bind</button>` :
+                                `<button onclick="openDepositModal('${t.id}')" class="flex-1 bg-green-600 hover:bg-green-500 text-white text-sm font-medium py-2 rounded-lg transition-colors">Deposit</button>
+                                 <button onclick="openSettleModal('${t.id}', ${t.credits || 0})" class="flex-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-text-main dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600 text-sm font-medium py-2 rounded-lg transition-colors">Settle</button>`
+                            }
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading terminals:', error);
+        }
+    }
+
+    function openBindModal(tid) {
+        document.getElementById('bind-tid').value = tid;
+        document.getElementById('bindModal').classList.remove('hidden');
+    }
+
+    function openDepositModal(tid) {
+        document.getElementById('deposit-tid').value = tid;
+        document.getElementById('depositModal').classList.remove('hidden');
+    }
+
+    function openSettleModal(tid, credits) {
+        document.getElementById('settle-tid').value = tid;
+        document.getElementById('settle-credits').textContent = credits;
+        document.getElementById('settleModal').classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+    }
+
+    async function submitBind() {
+        const tid = document.getElementById('bind-tid').value;
+        const phone = document.getElementById('bind-phone').value;
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await fetch(`/api/terminals/${tid}/bind`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ phone_number: phone }) // Assuming API expects phone_number
+            });
+
+            if (response.ok) {
+                closeModal('bindModal');
+                loadTerminals();
+            } else {
+                alert('Failed to bind terminal');
+            }
+        } catch (error) {
+            console.error('Error binding:', error);
+        }
+    }
+
+    async function submitDeposit() {
+        const tid = document.getElementById('deposit-tid').value;
+        const amount = document.getElementById('deposit-amount').value;
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await fetch(`/api/terminals/${tid}/deposit`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ amount: parseInt(amount) })
+            });
+
+            if (response.ok) {
+                closeModal('depositModal');
+                loadTerminals();
+            } else {
+                alert('Failed to deposit');
+            }
+        } catch (error) {
+            console.error('Error depositing:', error);
+        }
+    }
+
+    async function submitSettle() {
+        const tid = document.getElementById('settle-tid').value;
+        const token = localStorage.getItem('token');
+
+        try {
+            const response = await fetch(`/api/terminals/${tid}/settle`, {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + token }
+            });
+
+            if (response.ok) {
+                closeModal('settleModal');
+                loadTerminals();
+            } else {
+                alert('Failed to settle');
+            }
+        } catch (error) {
+            console.error('Error settling:', error);
+        }
+    }
+
+    // Initial load
+    loadTerminals();
+    // Poll every 5 seconds
+    setInterval(loadTerminals, 5000);
+</script>
+{% endblock %}

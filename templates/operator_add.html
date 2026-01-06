@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Add Operator - OMS{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto flex flex-col gap-6">
+    <nav aria-label="Breadcrumb" class="flex">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a class="inline-flex items-center text-sm font-medium text-text-secondary hover:text-primary transition-colors" href="/dashboard">
+                    <span class="material-symbols-outlined text-[20px] mr-1">home</span>
+                    首頁
+                </a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <span class="material-symbols-outlined text-text-secondary text-lg">chevron_right</span>
+                    <a class="ml-1 text-sm font-medium text-text-secondary hover:text-primary transition-colors" href="/org/operators">營運商管理</a>
+                </div>
+            </li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <span class="material-symbols-outlined text-text-secondary text-lg">chevron_right</span>
+                    <span class="ml-1 text-sm font-medium text-text-main dark:text-white">新增營運商</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <div class="flex flex-col gap-2 border-b border-border-light dark:border-border-dark pb-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-3xl font-black text-text-main dark:text-white tracking-tight">新增營運商</h2>
+                <p class="mt-2 text-base text-text-secondary">請填寫下方資訊以新增一位新的合作夥伴或營運商。</p>
+            </div>
+        </div>
+    </div>
+
+    <form id="addOperatorForm" class="bg-white dark:bg-surface-dark shadow-sm ring-1 ring-black/5 dark:ring-white/10 rounded-xl overflow-hidden" onsubmit="event.preventDefault(); createOperator();">
+        <div class="p-6 md:p-8 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-lg font-semibold text-text-main dark:text-white flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-primary">feed</span>
+                        基本資料
+                    </h3>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <label class="block text-sm font-medium leading-6 text-text-main dark:text-gray-200 mb-2" for="operator-name">
+                        營運商名稱 <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <input class="block w-full rounded-lg border-0 py-3 pl-4 pr-10 text-text-main shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-gray-800 dark:ring-gray-700 dark:text-white sm:text-sm sm:leading-6 transition-all" id="operator-name" name="name" placeholder="請輸入公司或營運商名稱" type="text" required/>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <label class="block text-sm font-medium leading-6 text-text-main dark:text-gray-200 mb-2" for="contact-name">
+                        聯絡人姓名 <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-400 text-lg">person</span>
+                        </div>
+                        <input class="block w-full rounded-lg border-0 py-3 pl-10 text-text-main shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-gray-800 dark:ring-gray-700 dark:text-white sm:text-sm sm:leading-6 transition-all" id="contact-name" name="contact_person" placeholder="請輸入聯絡人全名" type="text"/>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <label class="block text-sm font-medium leading-6 text-text-main dark:text-gray-200 mb-2" for="contact-phone">
+                        聯絡電話 <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-400 text-lg">call</span>
+                        </div>
+                        <input class="block w-full rounded-lg border-0 py-3 pl-10 text-text-main shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-gray-800 dark:ring-gray-700 dark:text-white sm:text-sm sm:leading-6 transition-all" id="contact-phone" name="phone" placeholder="例如：0912-345-678" type="tel"/>
+                    </div>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <label class="block text-sm font-medium leading-6 text-text-main dark:text-gray-200 mb-2" for="email">
+                        電子郵件
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-400 text-lg">mail</span>
+                        </div>
+                        <input class="block w-full rounded-lg border-0 py-3 pl-10 text-text-main shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-gray-800 dark:ring-gray-700 dark:text-white sm:text-sm sm:leading-6 transition-all" id="email" name="email" placeholder="name@company.com" type="email"/>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <label class="block text-sm font-medium leading-6 text-text-main dark:text-gray-200 mb-2" for="account">
+                        初始錢包餘額 (Wallet Balance)
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-400 text-lg">account_balance_wallet</span>
+                        </div>
+                        <input class="block w-full rounded-lg border-0 py-3 pl-10 text-text-main shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary dark:bg-gray-800 dark:ring-gray-700 dark:text-white sm:text-sm sm:leading-6 transition-all" id="balance" name="wallet_balance" placeholder="0" type="number" value="0"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center justify-end gap-3 px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-border-light dark:border-border-dark">
+            <a href="/org/operators" class="px-5 py-2.5 text-sm font-medium text-text-main bg-white dark:bg-gray-700 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors" type="button">
+                取消
+            </a>
+            <button class="px-5 py-2.5 text-sm font-medium text-white bg-primary rounded-lg shadow-sm hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all flex items-center gap-2" type="submit">
+                <span class="material-symbols-outlined text-[18px]">save</span>
+                保存資料
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/';
+
+    async function createOperator() {
+        const form = document.getElementById('addOperatorForm');
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Convert balance to number
+        if (data.wallet_balance) data.wallet_balance = parseFloat(data.wallet_balance);
+
+        try {
+            const response = await fetch('/api/operators', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert('Operator created successfully!');
+                window.location.href = '/org/operators';
+            } else {
+                const err = await response.json();
+                alert('Error: ' + err.detail);
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Failed to create operator');
+        }
+    }
+</script>
+{% endblock %}

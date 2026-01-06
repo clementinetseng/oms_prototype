@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - OMS{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto flex flex-col gap-6">
+    <div>
+        <h2 class="text-2xl md:text-3xl font-bold text-text-main dark:text-white tracking-tight">Settings</h2>
+        <p class="text-text-secondary text-sm mt-1">Manage system configurations and preferences.</p>
+    </div>
+
+    <div class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden">
+        <!-- Tabs -->
+        <div class="border-b border-border-light dark:border-border-dark">
+            <nav class="flex -mb-px" aria-label="Tabs">
+                <button class="w-1/3 py-4 px-1 text-center border-b-2 border-primary text-primary font-medium text-sm" id="tab-general">
+                    General
+                </button>
+                <button class="w-1/3 py-4 px-1 text-center border-b-2 border-transparent text-text-secondary hover:text-text-main hover:border-gray-300 font-medium text-sm transition-colors" id="tab-security">
+                    Security
+                </button>
+                <button class="w-1/3 py-4 px-1 text-center border-b-2 border-transparent text-text-secondary hover:text-text-main hover:border-gray-300 font-medium text-sm transition-colors" id="tab-notifications">
+                    Notifications
+                </button>
+            </nav>
+        </div>
+
+        <div class="p-6 md:p-8">
+            <!-- General Settings -->
+            <div id="content-general" class="space-y-6">
+                <h3 class="text-lg font-bold text-text-main dark:text-white">System Preferences</h3>
+                <div class="grid grid-cols-1 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-text-main dark:text-white mb-2">System Name</label>
+                        <input type="text" class="block w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-gray-800 text-text-main dark:text-white focus:ring-primary focus:border-primary sm:text-sm py-2.5 px-4" value="OMS Production">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-text-main dark:text-white mb-2">Timezone</label>
+                        <select class="block w-full rounded-lg border-border-light dark:border-border-dark bg-background-light dark:bg-gray-800 text-text-main dark:text-white focus:ring-primary focus:border-primary sm:text-sm py-2.5 px-4">
+                            <option>UTC</option>
+                            <option selected>Asia/Taipei (GMT+8)</option>
+                            <option>America/New_York (GMT-5)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-border-light dark:border-border-dark flex justify-end">
+            <button class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold hover:bg-primary-hover transition-colors shadow-sm">
+                Save Changes
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Simple tab switching logic
+    const tabs = ['general', 'security', 'notifications'];
+    tabs.forEach(tab => {
+        const btn = document.getElementById(`tab-${tab}`);
+        if(btn) {
+            btn.addEventListener('click', () => {
+                // Reset all
+                tabs.forEach(t => {
+                    const b = document.getElementById(`tab-${t}`);
+                    if(b) {
+                        b.classList.remove('border-primary', 'text-primary');
+                        b.classList.add('border-transparent', 'text-text-secondary');
+                    }
+                });
+                // Activate current
+                btn.classList.remove('border-transparent', 'text-text-secondary');
+                btn.classList.add('border-primary', 'text-primary');
+            });
+        }
+    });
+</script>
+{% endblock %}

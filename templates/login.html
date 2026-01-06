@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Login - OMS</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "primary-hover": "#0f6ac6",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2632",
+                    },
+                    fontFamily: {
+                        "body": ["Inter", "sans-serif"],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background-dark flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-md bg-surface-light dark:bg-surface-dark rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+        <div class="p-8">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">OMS Login</h1>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">Sign in to access the admin console</p>
+            </div>
+
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
+                    <input type="text" id="username" required 
+                        class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary sm:text-sm py-3 px-4"
+                        placeholder="Enter your username">
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                    <input type="password" id="password" required 
+                        class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary sm:text-sm py-3 px-4"
+                        placeholder="••••••••">
+                </div>
+
+                <button type="submit" 
+                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors">
+                    Sign in
+                </button>
+            </form>
+
+            <div id="error" class="mt-4 text-center text-sm text-red-600 dark:text-red-400 font-medium hidden"></div>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-800/50 px-8 py-4 border-t border-gray-200 dark:border-gray-700 text-center">
+            <p class="text-xs text-gray-500 dark:text-gray-400">© 2023 OMS System. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('error');
+            
+            errorDiv.classList.add('hidden');
+            errorDiv.textContent = '';
+
+            const params = new URLSearchParams();
+            params.append('username', username);
+            params.append('password', password);
+
+            try {
+                const response = await fetch('/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: params
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.access_token);
+                    window.location.href = '/dashboard';
+                } else {
+                    errorDiv.textContent = 'Invalid username or password';
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error(err);
+                errorDiv.textContent = 'Connection error. Please try again.';
+                errorDiv.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - OMS{% endblock %}
+
+{% block content %}
+<div class="max-w-[1600px] mx-auto flex flex-col gap-6">
+    <!-- Announcement Banner -->
+    <div class="w-full">
+        <div class="flex flex-col items-start gap-3 rounded-lg border border-blue-100 bg-blue-50/50 dark:bg-blue-900/10 dark:border-blue-800 p-4 md:flex-row md:items-center justify-between">
+            <div class="flex items-start gap-3 md:items-center">
+                <div class="text-primary bg-white dark:bg-surface-dark p-1.5 rounded-full shadow-sm flex items-center justify-center">
+                    <span class="material-symbols-outlined">campaign</span>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                    <p class="text-text-main dark:text-white text-sm font-bold">System Announcement</p>
+                    <p class="text-text-secondary text-sm">Scheduled maintenance on Dec 30th, 02:00 AM - 04:00 AM (UTC+8).</p>
+                </div>
+            </div>
+            <button class="text-sm font-bold text-primary hover:underline flex items-center gap-1 whitespace-nowrap">
+                View Details <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <!-- Total Bet -->
+        <div class="flex flex-col gap-3 rounded-xl border border-border-light dark:border-border-dark bg-white dark:bg-surface-dark p-6 shadow-sm">
+            <div class="flex items-center justify-between">
+                <p class="text-text-secondary text-sm font-medium">Total Bet Amount</p>
+                <span class="material-symbols-outlined text-gray-400">payments</span>
+            </div>
+            <div>
+                <p class="text-text-main dark:text-white text-2xl font-bold tracking-tight">$1,204,500</p>
+                <div class="flex items-center gap-1 mt-1">
+                    <span class="material-symbols-outlined text-green-600 text-[18px]">trending_up</span>
+                    <p class="text-green-600 text-sm font-medium">+5.2% <span class="text-text-secondary font-normal">vs yesterday</span></p>
+                </div>
+            </div>
+        </div>
+        <!-- Total P/L -->
+        <div class="flex flex-col gap-3 rounded-xl border border-border-light dark:border-border-dark bg-white dark:bg-surface-dark p-6 shadow-sm">
+            <div class="flex items-center justify-between">
+                <p class="text-text-secondary text-sm font-medium">Total P/L</p>
+                <span class="material-symbols-outlined text-gray-400">account_balance_wallet</span>
+            </div>
+            <div>
+                <p class="text-text-main dark:text-white text-2xl font-bold tracking-tight">$340,200</p>
+                <div class="flex items-center gap-1 mt-1">
+                    <span class="material-symbols-outlined text-green-600 text-[18px]">trending_up</span>
+                    <p class="text-green-600 text-sm font-medium">+1.8% <span class="text-text-secondary font-normal">margin</span></p>
+                </div>
+            </div>
+        </div>
+        <!-- Total Cash In -->
+        <div class="flex flex-col gap-3 rounded-xl border border-border-light dark:border-border-dark bg-white dark:bg-surface-dark p-6 shadow-sm">
+            <div class="flex items-center justify-between">
+                <p class="text-text-secondary text-sm font-medium">Total Cash In</p>
+                <span class="material-symbols-outlined text-gray-400">savings</span>
+            </div>
+            <div>
+                <p class="text-text-main dark:text-white text-2xl font-bold tracking-tight">$890,000</p>
+                <div class="flex items-center gap-1 mt-1">
+                    <span class="material-symbols-outlined text-red-500 text-[18px]">trending_down</span>
+                    <p class="text-red-500 text-sm font-medium">-0.5% <span class="text-text-secondary font-normal">vs last week</span></p>
+                </div>
+            </div>
+        </div>
+        <!-- Online Machines -->
+        <div class="flex flex-col gap-3 rounded-xl border border-border-light dark:border-border-dark bg-white dark:bg-surface-dark p-6 shadow-sm">
+            <div class="flex items-center justify-between">
+                <p class="text-text-secondary text-sm font-medium">Online Machines</p>
+                <div class="flex items-center gap-1.5">
+                    <span class="relative flex h-2.5 w-2.5">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                    </span>
+                    <span class="text-xs font-medium text-green-600">Live</span>
+                </div>
+            </div>
+            <div>
+                <p class="text-text-main dark:text-white text-2xl font-bold tracking-tight">142 <span class="text-gray-400 text-lg font-normal">/ 150</span></p>
+                <div class="flex items-center gap-1 mt-1">
+                    <p class="text-text-secondary text-sm font-normal">8 machines offline</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Grid: Charts & BCF Monitor -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Chart Section (Takes up 2 cols on LG) -->
+        <div class="lg:col-span-2 rounded-xl border border-border-light dark:border-border-dark bg-white dark:bg-surface-dark p-6 shadow-sm flex flex-col">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h3 class="text-text-main dark:text-white text-lg font-bold">Betting Volume Trends (24h)</h3>
+                    <p class="text-text-secondary text-sm">Real-time betting data across all outlets</p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="px-3 py-1 text-xs font-medium rounded-md bg-primary text-white">Today</button>
+                    <button class="px-3 py-1 text-xs font-medium rounded-md text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700">Week</button>
+                </div>
+            </div>
+            <div class="flex-1 w-full min-h-[250px] flex flex-col justify-end">
+                <!-- Simulated Chart -->
+                <div class="relative w-full h-[200px] mt-4">
+                    <svg class="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 50">
+                        <!-- Grid lines -->
+                        <line stroke="#f3f4f6" stroke-width="0.5" x1="0" x2="100" y1="0" y2="0"></line>
+                        <line stroke="#f3f4f6" stroke-width="0.5" x1="0" x2="100" y1="12.5" y2="12.5"></line>
+                        <line stroke="#f3f4f6" stroke-width="0.5" x1="0" x2="100" y1="25" y2="25"></line>
+                        <line stroke="#f3f4f6" stroke-width="0.5" x1="0" x2="100" y1="37.5" y2="37.5"></line>
+                        <!-- Area Path -->
+                        <path d="M0 45 C 10 40, 20 45, 30 30 C 40 15, 50 25, 60 20 C 70 15, 80 5, 90 10 L 100 5 V 50 H 0 Z" fill="url(#gradient)" opacity="0.2"></path>
+                        <!-- Line Path -->
+                        <path d="M0 45 C 10 40, 20 45, 30 30 C 40 15, 50 25, 60 20 C 70 15, 80 5, 90 10 L 100 5" fill="none" stroke="#137fec" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+                        <!-- Gradient Def -->
+                        <defs>
+                            <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
+                                <stop offset="0%" stop-color="#137fec"></stop>
+                                <stop offset="100%" stop-color="#ffffff" stop-opacity="0"></stop>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <!-- Tooltip simulation -->
+                    <div class="absolute top-[10%] left-[60%] bg-black text-white text-xs py-1 px-2 rounded transform -translate-x-1/2 -translate-y-full pointer-events-none">
+                        $420k Vol
+                        <div class="absolute bottom-[-4px] left-1/2 transform -translate-x-1/2 w-2 h-2 bg-black rotate-45"></div>
+                    </div>
+                    <div class="absolute top-[10%] left-[60%] w-3 h-3 bg-primary rounded-full border-2 border-white shadow-sm transform -translate-x-1/2 -translate-y-1/2"></div>
+                </div>
+                <!-- X Axis Labels -->
+                <div class="flex justify-between text-gray-400 text-xs mt-2 px-1">
+                    <span>00:00</span>
+                    <span>04:00</span>
+                    <span>08:00</span>
+                    <span>12:00</span>
+                    <span>16:00</span>
+                    <span>20:00</span>
+                    <span>Now</span>
+                </div>
+            </div>
+        </div>
+        <!-- BCF Monitor (Takes up 1 col on LG) -->
+        <div class="lg:col-span-1 flex flex-col gap-4">
+            <!-- BCF Card -->
+            <div class="rounded-xl border border-border-light dark:border-border-dark bg-white dark:bg-surface-dark p-6 shadow-sm flex flex-col h-full justify-between">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-text-main dark:text-white text-lg font-bold">BCF Credit Monitor</h3>
+                    <button class="text-primary hover:bg-blue-50 dark:hover:bg-blue-900/20 p-1 rounded transition">
+                        <span class="material-symbols-outlined text-[20px]">settings</span>
+                    </button>
+                </div>
+                <p class="text-text-secondary text-sm mb-6">Bankroll Control Fund utilization status.</p>
+                <!-- Circular Progress or Gauge representation -->
+                <div class="flex flex-col items-center justify-center py-4">
+                    <div class="relative size-40">
+                        <svg class="size-full" height="36" viewBox="0 0 36 36" width="36" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Background Circle -->
+                            <path class="text-gray-100 dark:text-gray-700" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="3"></path>
+                            <!-- Value Circle (75% filled) -->
+                            <path class="text-primary drop-shadow-md" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="75, 100" stroke-linecap="round" stroke-width="3"></path>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span class="text-3xl font-bold text-text-main dark:text-white">75%</span>
+                            <span class="text-xs text-text-secondary">Utilized</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 mt-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-text-secondary">Used Credit</span>
+                        <span class="font-bold text-text-main dark:text-white">$750,000</span>
+                    </div>
+                    <div class="w-full bg-gray-100 rounded-full h-1.5 dark:bg-gray-700">
+                        <div class="bg-primary h-1.5 rounded-full" style="width: 75%"></div>
+                    </div>
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-text-secondary">Total Limit</span>
+                        <span class="font-medium text-text-main dark:text-white">$1,000,000</span>
+                    </div>
+                </div>
+                <button class="mt-6 w-full py-2.5 px-4 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 font-bold rounded-lg text-sm transition-colors border border-red-100 dark:border-red-800">
+                    Adjust Limits
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity Table -->
+    <div class="rounded-xl border border-border-light dark:border-border-dark bg-white dark:bg-surface-dark overflow-hidden shadow-sm">
+        <div class="p-6 border-b border-border-light dark:border-border-dark flex justify-between items-center">
+            <h3 class="text-text-main dark:text-white text-lg font-bold">Recent System Activity</h3>
+            <button class="text-primary text-sm font-bold hover:underline">View All Logs</button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="text-xs text-text-secondary uppercase bg-background-light dark:bg-gray-800 border-b border-border-light dark:border-border-dark">
+                    <tr>
+                        <th class="px-6 py-4 font-medium">Time</th>
+                        <th class="px-6 py-4 font-medium">Event Type</th>
+                        <th class="px-6 py-4 font-medium">Outlet/Machine</th>
+                        <th class="px-6 py-4 font-medium">User</th>
+                        <th class="px-6 py-4 font-medium">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-border-light dark:divide-border-dark">
+                    <tr class="bg-white dark:bg-surface-dark hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap text-text-main dark:text-gray-300">10:42 AM</td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center gap-2">
+                                <span class="size-2 rounded-full bg-orange-400"></span>
+                                Error Alert
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-text-main dark:text-gray-300">Machine-A04</td>
+                        <td class="px-6 py-4 text-text-secondary">System</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs font-semibold">Pending</span></td>
+                    </tr>
+                    <tr class="bg-white dark:bg-surface-dark hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap text-text-main dark:text-gray-300">10:35 AM</td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center gap-2">
+                                <span class="size-2 rounded-full bg-blue-500"></span>
+                                Limit Adjustment
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-text-main dark:text-gray-300">Outlet #12</td>
+                        <td class="px-6 py-4 text-text-secondary">admin_jason</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Success</span></td>
+                    </tr>
+                    <tr class="bg-white dark:bg-surface-dark hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap text-text-main dark:text-gray-300">10:15 AM</td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center gap-2">
+                                <span class="size-2 rounded-full bg-green-500"></span>
+                                Machine Online
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-text-main dark:text-gray-300">Machine-B02</td>
+                        <td class="px-6 py-4 text-text-secondary">Auto-Reconnect</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-semibold">Active</span></td>
+                    </tr>
+                    <tr class="bg-white dark:bg-surface-dark hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap text-text-main dark:text-gray-300">09:58 AM</td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center gap-2">
+                                <span class="size-2 rounded-full bg-purple-500"></span>
+                                User Login
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-text-main dark:text-gray-300">Web Portal</td>
+                        <td class="px-6 py-4 text-text-secondary">operator_mike</td>
+                        <td class="px-6 py-4"><span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-semibold">Logged In</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-4 pb-6 text-center text-xs text-text-secondary">
+        <p>© 2024 Outlet Management System. All rights reserved.</p>
+    </footer>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Placeholder for dashboard logic if needed
+    // Currently using static design as requested
+</script>
+{% endblock %}

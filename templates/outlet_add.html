@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Add Outlet - OMS{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto flex flex-col gap-6">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+            <div class="flex items-center gap-2 text-sm text-text-secondary mb-1">
+                <a href="/org/outlets">店家設定</a>
+                <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+                <span class="text-primary font-medium">新增店家</span>
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight text-text-main dark:text-white">新增店家資料</h1>
+            <p class="mt-1 text-sm text-text-secondary">填寫下方資訊以建立新的店家檔案，帶有 * 號為必填欄位。</p>
+        </div>
+        <div class="flex gap-3">
+            <a href="/org/outlets" class="flex items-center justify-center px-4 py-2 rounded-lg bg-white dark:bg-gray-800 border border-border-light dark:border-border-dark text-text-main dark:text-gray-200 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                取消
+            </a>
+            <button class="flex items-center justify-center px-4 py-2 rounded-lg bg-primary text-white shadow-sm hover:bg-primary/90 text-sm font-medium transition-colors" onclick="createOutlet()">
+                <span class="material-symbols-outlined text-[18px] mr-1">save</span>
+                保存變更
+            </button>
+        </div>
+    </div>
+
+    <form id="addOutletForm" onsubmit="event.preventDefault(); createOutlet();">
+        <div class="bg-white dark:bg-surface-dark rounded-xl shadow-sm border border-border-light dark:border-border-dark overflow-hidden">
+            <div class="p-6 md:p-8 border-b border-border-light dark:border-border-dark">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                        <span class="material-symbols-outlined text-primary">storefront</span>
+                    </div>
+                    <h2 class="text-lg font-bold leading-tight text-text-main dark:text-white">店家基本資料</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-sm font-medium leading-6 text-text-main dark:text-gray-200 mb-2">
+                            店名 <span class="text-red-500">*</span>
+                        </label>
+                        <input class="block w-full rounded-lg border-0 py-3 px-4 text-text-main dark:text-white bg-white dark:bg-surface-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-gray-600 placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 transition-shadow" placeholder="輸入店家名稱 (例如: 台北信義旗艦店)" type="text" name="name" required/>
+                    </div>
+                    <div class="col-span-1">
+                        <label class="block text-sm font-medium leading-6 text-text-main dark:text-gray-200 mb-2">
+                            店長全名 <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input class="block w-full rounded-lg border-0 py-3 px-4 text-text-main dark:text-white bg-white dark:bg-surface-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-gray-600 placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 transition-shadow" placeholder="輸入店長全名" type="text"/>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                                <span class="material-symbols-outlined text-[20px]">person</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-1">
+                        <label class="block text-sm font-medium leading-6 text-text-main dark:text-gray-200 mb-2">
+                            聯絡電話 <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input class="block w-full rounded-lg border-0 py-3 px-4 text-text-main dark:text-white bg-white dark:bg-surface-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-gray-600 placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 transition-shadow" placeholder="02-1234-5678" type="tel"/>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                                <span class="material-symbols-outlined text-[20px]">call</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-sm font-medium leading-6 text-text-main dark:text-gray-200 mb-2">
+                            地址
+                        </label>
+                        <div class="relative">
+                            <input class="block w-full rounded-lg border-0 py-3 px-4 text-text-main dark:text-white bg-white dark:bg-surface-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-gray-600 placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 transition-shadow" placeholder="輸入完整地址" type="text" name="address"/>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                                <span class="material-symbols-outlined text-[20px]">location_on</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 md:p-8 border-b border-border-light dark:border-border-dark bg-gray-50/50 dark:bg-gray-800/30">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                        <span class="material-symbols-outlined text-primary">domain</span>
+                    </div>
+                    <h2 class="text-lg font-bold leading-tight text-text-main dark:text-white">所屬營運商</h2>
+                </div>
+                <div class="max-w-xl">
+                    <label class="block text-sm font-medium leading-6 text-text-main dark:text-gray-200 mb-2">
+                        選擇營運商 <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <select class="block w-full rounded-lg border-0 py-3 pl-4 pr-10 text-text-main dark:text-white bg-white dark:bg-surface-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-gray-600 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 cursor-pointer appearance-none transition-shadow" name="operator_id" id="operatorSelect" required>
+                            <option disabled="" selected="" value="">請選擇...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6 md:p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                            <span class="material-symbols-outlined text-primary">security</span>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold leading-tight text-text-main dark:text-white">IP 白名單管理</h2>
+                            <p class="text-xs text-text-secondary mt-1">設定允許存取後台管理系統的 IP 位址</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-3 items-end mb-6 max-w-xl">
+                    <div class="flex-1 w-full">
+                        <label class="block text-sm font-medium leading-6 text-text-main dark:text-gray-200 mb-2">
+                            新增 IP 位址
+                        </label>
+                        <input class="block w-full rounded-lg border-0 py-3 px-4 text-text-main dark:text-white bg-white dark:bg-surface-dark shadow-sm ring-1 ring-inset ring-border-light dark:ring-gray-600 placeholder:text-text-secondary focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 font-mono transition-shadow" placeholder="例如: 192.168.1.1" type="text" name="ip_whitelist"/>
+                    </div>
+                    <button class="w-full sm:w-auto flex items-center justify-center px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-border-light dark:border-border-dark hover:bg-gray-50 dark:hover:bg-gray-700 text-text-main dark:text-gray-200 text-sm font-medium transition-colors h-[48px]" type="button">
+                        <span class="material-symbols-outlined text-[20px] mr-2 text-primary">add_circle</span>
+                        新增
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = '/';
+
+    async function loadOperators() {
+        const response = await fetch('/api/operators', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+            const operators = await response.json();
+            const select = document.getElementById('operatorSelect');
+            select.innerHTML = '<option disabled selected value="">請選擇...</option>' + 
+                operators.map(o => `<option value="${o.id}">${o.name}</option>`).join('');
+        }
+    }
+
+    async function createOutlet() {
+        const form = document.getElementById('addOutletForm');
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Convert operator_id to int
+        if (data.operator_id) data.operator_id = parseInt(data.operator_id);
+
+        try {
+            const response = await fetch('/api/outlets', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert('Outlet created successfully!');
+                window.location.href = '/org/outlets';
+            } else {
+                const err = await response.json();
+                alert('Error: ' + err.detail);
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Failed to create outlet');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadOperators);
+</script>
+{% endblock %}
