@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 import models, schemas, auth
 from database import engine, get_db
-from datetime import timedelta
+from datetime import timedelta, datetime
 import os
 
 models.Base.metadata.create_all(bind=engine)
@@ -79,6 +79,157 @@ def update_system_config(key: str = Form(...), value: str = Form(...), current_u
     return {"message": "Config updated", "key": key, "value": value}
 
 # --- Terminal Management ---
+import secrets
+
+@app.get("/api/terminals", response_model=List[schemas.TerminalOut])
+def get_terminals(
+    outlet_id: Optional[int] = None, 
+    status: Optional[str] = None,
+    current_user: models.User = Depends(auth.require_permission("SETTINGS_MANAGE")), 
+    db: Session = Depends(get_db)
+):
+    query = db.query(models.Terminal)
+    
+    # Filter by Scope
+    if current_user.role.name == "Operator":
+        # Get outlets for this operator
+        # Simplifying: Operator manages Terminals for their outlets.
+        # Ideally we join outlets, but for prototype let's rely on passed outlet_id if user is admin/operator
+        # But we must verify permission.
+        pass # Allow query
+    elif current_user.outlet_id:
+         # Store Mgr / Cashier restricted to their outlet
+        query = query.filter(models.Terminal.outlet_id == current_user.outlet_id)
+    
+    if outlet_id:
+        query = query.filter(models.Terminal.outlet_id == outlet_id)
+        
+    if status:
+        if status == "Active":
+            query = query.filter(models.Terminal.is_active == True)
+        elif status == "Disabled":
+             query = query.filter(models.Terminal.is_active == False)
+             
+    return query.all()
+
+@app.post("/api/terminals", response_model=schemas.TerminalOut)
+def create_terminal(
+    term: schemas.TerminalCreate,
+    current_user: models.User = Depends(auth.require_permission("SETTINGS_MANAGE")),
+    db: Session = Depends(get_db)
+):
+    # System Generate Code
+    # Format: T-{outlet_id}-{seq} or Random? PRD says generate unique.
+    # Let's use simple random for prototype or T-{timestamp}
+    import time
+    code = f"T-{int(time.time()*1000)}"
+    
+    db_term = models.Terminal(
+        name=term.name,
+        code=code,
+        outlet_id=term.outlet_id,
+        is_active=term.is_active
+    )
+    db.add(db_term)
+    db.commit()
+    db.refresh(db_term)
+    return db_term
+
+@app.put("/api/terminals/{id}", response_model=schemas.TerminalOut)
+def update_terminal(
+    id: int, 
+    term_update: schemas.TerminalCreate, # Reusing Create schema for simplicity, or create Update schema
+    current_user: models.User = Depends(auth.require_permission("SETTINGS_MANAGE")),
+    db: Session = Depends(get_db)
+):
+    term = db.query(models.Terminal).filter(models.Terminal.id == id).first()
+    if not term:
+        raise HTTPException(status_code=404, detail="Terminal not found")
+        
+    term.name = term_update.name
+    term.is_active = term_update.is_active
+    db.commit()
+    db.refresh(term)
+    return term
+
+@app.post("/api/terminals/{id}/pair")
+def generate_pairing_code(
+    id: int,
+    current_user: models.User = Depends(auth.require_permission("SETTINGS_MANAGE")),
+    db: Session = Depends(get_db)
+):
+    term = db.query(models.Terminal).filter(models.Terminal.id == id).first()
+    if not term:
+        raise HTTPException(status_code=404, detail="Terminal not found")
+    
+    if not term.is_active:
+        raise HTTPException(status_code=400, detail="Terminal is disabled")
+        
+    code = secrets.token_hex(3).upper()
+    term.pairing_code = code
+    term.pairing_expires_at = datetime.utcnow() + timedelta(minutes=10)
+    db.commit()
+    
+    return {"pairing_code": code, "expires_at": term.pairing_expires_at}
+
+@app.post("/api/terminals/{id}/unpair")
+def unpair_terminal(
+    id: int,
+    current_user: models.User = Depends(auth.require_permission("SETTINGS_MANAGE")),
+    db: Session = Depends(get_db)
+):
+    term = db.query(models.Terminal).filter(models.Terminal.id == id).first()
+    if not term:
+        raise HTTPException(status_code=404, detail="Terminal not found")
+        
+    term.is_paired = False
+    term.hardware_id = None
+    term.pairing_code = None
+    db.commit()
+    return {"message": "Unpaired successfully"}
+
+@app.get("/api/pos/terminals")
+def get_pos_terminals(
+    current_user: models.User = Depends(auth.require_permission("POS_OPERATE")), 
+    db: Session = Depends(get_db)
+):
+    if not current_user.outlet_id:
+        raise HTTPException(status_code=400, detail="User must belong to an outlet")
+        
+    terms = db.query(models.Terminal).filter(
+        models.Terminal.outlet_id == current_user.outlet_id,
+        models.Terminal.is_active == True
+    ).all()
+    
+    res = []
+    for t in terms:
+        player_info = None
+        balance = 0.0
+        if t.status == models.TerminalStatus.OCCUPIED and t.current_player_id:
+            # Get nickname
+            player = db.query(models.Player).filter(models.Player.id == t.current_player_id).first()
+            if player:
+                # Get wallet for this outlet
+                wallet = db.query(models.Wallet).filter(
+                    models.Wallet.player_id == player.id,
+                    models.Wallet.outlet_id == current_user.outlet_id
+                ).first()
+                balance = wallet.balance if wallet else 0.0
+                player_info = {
+                    "nickname": player.nickname,
+                    "id": player.id,
+                    "phone": player.phone
+                }
+        
+        res.append({
+            "id": t.id,
+            "name": t.name,
+            "code": t.code,
+            "status": t.status,
+            "player": player_info,
+            "credits": balance
+        })
+    return res
 
 @app.delete("/api/terminals/{id}")
 def delete_terminal(id: int, current_user: models.User = Depends(auth.require_permission("SETTINGS_MANAGE")), db: Session = Depends(get_db)):

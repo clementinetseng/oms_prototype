@@ -94,11 +94,20 @@ class Outlet(Base):
 class Terminal(Base):
     __tablename__ = "terminals"
     id = Column(Integer, primary_key=True, index=True)
-    code = Column(String, unique=True) # e.g., T-01
+    code = Column(String, unique=True) # System Gen ID (e.g., T-0001)
+    name = Column(String, nullable=True) # User defined name (e.g., 1號機)
     outlet_id = Column(Integer, ForeignKey("outlets.id"))
-    status = Column(String, default=TerminalStatus.IDLE) # TerminalStatus
-    pairing_key = Column(String, nullable=True)
-    hardware_id = Column(String, nullable=True)
+    
+    # Statuses
+    is_active = Column(Boolean, default=True) # Admin Status: Active/Disabled
+    status = Column(String, default=TerminalStatus.IDLE) # Ops Status: Idle/Occupied
+    
+    # Pairing Info
+    is_paired = Column(Boolean, default=False)
+    pairing_code = Column(String, nullable=True)
+    pairing_expires_at = Column(DateTime, nullable=True)
+    hardware_id = Column(String, nullable=True) # Device fingerprint
+    last_seen = Column(DateTime, nullable=True)
     
     # Current Session Info
     current_player_id = Column(Integer, ForeignKey("players.id"), nullable=True)

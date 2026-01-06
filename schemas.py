@@ -81,9 +81,23 @@ class OutletOut(OutletCreate):
         from_attributes = True
 
 class TerminalCreate(BaseModel):
-    code: str
+    name: str
     outlet_id: int
-    hardware_id: Optional[str] = None
+    is_active: bool = True
+
+class TerminalOut(BaseModel):
+    id: int
+    code: str
+    name: Optional[str]
+    outlet_id: int
+    status: str
+    is_active: bool
+    is_paired: bool
+    last_seen: Optional[datetime]
+    hardware_id: Optional[str]
+    
+    class Config:
+        from_attributes = True
 
 class PlayerSearch(BaseModel):
     phone: str

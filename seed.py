@@ -59,7 +59,14 @@ def init_db():
     
     # 3. Create Terminals
     for i in range(1, 11):
-        t = models.Terminal(code=f"T-{i:02d}", outlet_id=outlet.id, status=models.TerminalStatus.IDLE)
+        t = models.Terminal(
+            code=f"OP1-TP-T{i:02d}", 
+            name=f"{i}號機",
+            outlet_id=outlet.id, 
+            status=models.TerminalStatus.IDLE,
+            is_active=True,
+            is_paired=False
+        )
         db.add(t)
     db.commit()
     
